@@ -1,6 +1,6 @@
 import type { AppRouteRecord } from '@/types/router'
 
-const ddragRoutes: AppRouteRecord[] = [
+export const ddragRoutes: AppRouteRecord[] = [
   {
     path: '/groups',
     name: 'DdragGroups',
@@ -91,5 +91,3 @@ const ddragRoutes: AppRouteRecord[] = [
     ],
   },
 ]
-
-export default ddragRoutes
