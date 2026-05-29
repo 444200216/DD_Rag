@@ -52,6 +52,7 @@ import { fetchGetUserInfo } from '@/api/auth'
 import { ApiStatus } from '@/utils/http/status'
 import { isHttpError } from '@/utils/http/error'
 import { RouteRegistry, MenuProcessor, IframeRouteManager, RoutePermissionValidator } from '../core'
+import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
 
 // 路由注册器实例
 let routeRegistry: RouteRegistry | null = null
@@ -178,6 +179,26 @@ async function handleRouteGuard(
     }
     await handleDynamicRoutes(to, next, router)
     return
+  }
+
+  // DD_Rag role enforcement
+  const ddragAuthStore = useDdragAuthStore()
+  if (ddragAuthStore.isAuthenticated) {
+    // MustChangePassword enforcement (highest priority)
+    if (ddragAuthStore.currentUser?.mustChangePassword && to.path !== '/account/security') {
+      return next({ path: '/account/security', replace: true })
+    }
+
+    // ADMIN on business route → redirect to management
+    const businessPrefixes = ['/groups', '/documents', '/qa', '/assistant']
+    if (ddragAuthStore.isAdmin && businessPrefixes.some(p => to.path.startsWith(p))) {
+      return next({ path: '/management/overview', replace: true })
+    }
+
+    // USER on management route → redirect to groups
+    if (ddragAuthStore.isUser && to.path.startsWith('/management')) {
+      return next({ path: '/groups', replace: true })
+    }
   }
 
   // 4. 处理根路径重定向
