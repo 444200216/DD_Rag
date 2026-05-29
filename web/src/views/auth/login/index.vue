@@ -57,11 +57,13 @@
 
 <script setup lang="ts">
 import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
+import { useUserStore } from '@/store/modules/user'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 
 defineOptions({ name: 'Login' })
 
 const authStore = useDdragAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -85,12 +87,11 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    const session = await authStore.login({ loginId: formData.loginId, password: formData.password })
-    // Note: authStore.login will be connected in Task 17 (API Integration)
-    // For now, use mock auth directly
     const { login } = await import('@/api/ddrag/auth')
     const result = await login({ loginId: formData.loginId, password: formData.password })
     authStore.setSession(result.accessToken, result.currentUser)
+    userStore.setLoginStatus(true)
+    userStore.setToken(result.accessToken)
 
     ElNotification({
       title: '登录成功',

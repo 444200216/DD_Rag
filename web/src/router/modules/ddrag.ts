@@ -7,8 +7,8 @@ export const ddragRoutes: AppRouteRecord[] = [
     component: '/ddrag/groups/index',
     meta: {
       title: '我的组',
-      icon: 'el-icon-group',
-      roles: ['USER'],
+      icon: 'ri:team-line',
+      roles: ['USER', 'ADMIN'],
       requiresAuth: true,
     },
   },
@@ -18,8 +18,8 @@ export const ddragRoutes: AppRouteRecord[] = [
     component: '/ddrag/documents/index',
     meta: {
       title: '文档管理',
-      icon: 'el-icon-document',
-      roles: ['USER'],
+      icon: 'ri:folder-3-line',
+      roles: ['USER', 'ADMIN'],
       requiresAuth: true,
     },
   },
@@ -29,8 +29,8 @@ export const ddragRoutes: AppRouteRecord[] = [
     component: '/ddrag/qa/index',
     meta: {
       title: '知识问答',
-      icon: 'el-icon-chat-dot-round',
-      roles: ['USER'],
+      icon: 'ri:question-answer-line',
+      roles: ['USER', 'ADMIN'],
       requiresAuth: true,
     },
   },
@@ -40,8 +40,8 @@ export const ddragRoutes: AppRouteRecord[] = [
     component: '/ddrag/assistant/index',
     meta: {
       title: '智能助手',
-      icon: 'el-icon-magic-stick',
-      roles: ['USER'],
+      icon: 'ri:robot-2-line',
+      roles: ['USER', 'ADMIN'],
       requiresAuth: true,
       noKeepAlive: true,
     },
@@ -49,10 +49,11 @@ export const ddragRoutes: AppRouteRecord[] = [
   {
     path: '/management',
     name: 'DdragManagement',
+    component: '/index/index',
     redirect: '/management/overview',
     meta: {
       title: '系统管理',
-      icon: 'el-icon-setting',
+      icon: 'ri:settings-3-line',
       roles: ['ADMIN'],
       requiresAuth: true,
     },
@@ -63,6 +64,7 @@ export const ddragRoutes: AppRouteRecord[] = [
         component: '/ddrag/management/overview/index',
         meta: {
           title: '管理概览',
+          icon: 'ri:dashboard-line',
           roles: ['ADMIN'],
           requiresAuth: true,
         },
@@ -73,6 +75,7 @@ export const ddragRoutes: AppRouteRecord[] = [
         component: '/ddrag/management/users/index',
         meta: {
           title: '用户管理',
+          icon: 'ri:user-line',
           roles: ['ADMIN'],
           requiresAuth: true,
         },

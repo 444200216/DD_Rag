@@ -1,10 +1,13 @@
 <template>
-  <div class="flex h-full">
+  <div class="art-full-height flex flex-row gap-4">
     <!-- Session List (Left) -->
-    <div class="w-64 border-r border-gray-200 flex flex-col">
-      <div class="p-4 border-b border-gray-200">
-        <ElButton type="primary" size="small" class="w-full" @click="handleCreateSession">新建会话</ElButton>
-      </div>
+    <ElCard shadow="hover" class="w-64 flex flex-col overflow-hidden" style="flex-shrink:0">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="font-semibold">会话列表</span>
+          <ElButton type="primary" size="small" @click="handleCreateSession">新建会话</ElButton>
+        </div>
+      </template>
       <ElScrollbar class="flex-1">
         <div v-for="session in sessions" :key="session.sessionId"
           class="p-3 cursor-pointer hover:bg-blue-50 transition-colors"
@@ -14,10 +17,10 @@
           <p v-if="session.lastMessageAt" class="text-xs text-gray-400 mt-1">{{ formatTime(session.lastMessageAt) }}</p>
         </div>
       </ElScrollbar>
-    </div>
+    </ElCard>
 
     <!-- Chat Panel + Composer (Right) -->
-    <div class="flex-1 flex flex-col">
+    <ElCard shadow="hover" class="flex-1 flex flex-col overflow-hidden">
       <!-- No session selected -->
       <div v-if="!currentSessionId" class="flex-1 flex items-center justify-center text-gray-400">
         <p>选择或创建一个会话开始对话</p>
@@ -25,7 +28,7 @@
 
       <template v-else>
         <!-- Chat Messages -->
-        <ElScrollbar class="flex-1 p-6" ref="chatScrollbar">
+        <ElScrollbar class="flex-1 p-4" ref="chatScrollbar">
           <div v-for="msg in messages" :key="msg.messageId" class="mb-6">
             <div v-if="msg.role === 'USER'" class="flex justify-end">
               <div class="bg-blue-50 rounded-lg p-3 max-w-[70%]">
@@ -61,7 +64,7 @@
           <ElButton type="primary" @click="handleSendMessage" :loading="sending" :disabled="!inputMessage.trim()">发送</ElButton>
         </div>
       </template>
-    </div>
+    </ElCard>
   </div>
 </template>
 
