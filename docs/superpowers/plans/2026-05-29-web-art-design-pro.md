@@ -1,6 +1,6 @@
 # DD_Rag Frontend Rebase on art-design-pro — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`\- \[x\]`) syntax for tracking.
 
 **Goal:** Rebuild DD_Rag's frontend using art-design-pro as the base scaffold in a new `web/` directory, preserving all business logic while adopting Element Plus + Tailwind + Art* components. Design-first approach: all pages built with mock data, verified via /browse, then connected to backend API.
 
@@ -18,33 +18,33 @@
 - Modify: `web/src/config/setting.ts`
 - Modify: `web/vite.config.ts`
 
-- [ ] **Step 1: Copy art-design-pro to web/ directory**
+\- \[x\] **Step 1: Copy art-design-pro to web/ directory**
 
 ```bash
 cp -r /Users/zhangfeng/Development/workspace-trae/art-design-pro /Users/zhangfeng/Development/workspace-trae/DD_Rag/web
 ```
 
-- [ ] **Step 2: Remove art-design-pro's .git directory (web is part of DD_Rag repo)**
+\- \[x\] **Step 2: Remove art-design-pro's .git directory (web is part of DD_Rag repo)**
 
 ```bash
 rm -rf /Users/zhangfeng/Development/workspace-trae/DD_Rag/web/.git
 ```
 
-- [ ] **Step 3: Install dependencies**
+\- \[x\] **Step 3: Install dependencies**
 
 ```bash
 cd /Users/zhangfeng/Development/workspace-trae/DD_Rag/web && pnpm install
 ```
 
-- [ ] **Step 4: Configure app name and default route in `web/src/config/index.ts`**
+\- \[x\] **Step 4: Configure app name and default route in `web/src/config/index.ts`**
 
 Find the `systemInfo` object and change `name` to "DD_Rag 知识助手". Find default route redirect and change to `/groups`.
 
-- [ ] **Step 5: Configure default settings in `web/src/config/setting.ts`**
+\- \[x\] **Step 5: Configure default settings in `web/src/config/setting.ts`**
 
 Set: `menuType = MenuTypeEnum.LEFT`, `systemThemeColor = '#5D87FF'`, `enableWorkTab = true`
 
-- [ ] **Step 6: Configure Vite dev proxy in `web/vite.config.ts`**
+\- \[x\] **Step 6: Configure Vite dev proxy in `web/vite.config.ts`**
 
 Add proxy config in the `server` section:
 
@@ -66,7 +66,7 @@ Also add env variable file `web/.env.development`:
 VITE_DEV_PROXY_TARGET=http://localhost:8081
 ```
 
-- [ ] **Step 7: Verify scaffold runs**
+\- \[x\] **Step 7: Verify scaffold runs**
 
 ```bash
 cd /Users/zhangfeng/Development/workspace-trae/DD_Rag/web && pnpm dev
@@ -74,7 +74,7 @@ cd /Users/zhangfeng/Development/workspace-trae/DD_Rag/web && pnpm dev
 
 Expected: dev server starts, layout shell renders, art-design-pro default page loads
 
-- [ ] **Step 8: Commit scaffold**
+\- \[x\] **Step 8: Commit scaffold**
 
 ```bash
 git add web/
@@ -89,7 +89,7 @@ git commit -m "feat: scaffold web/ directory from art-design-pro"
 - Create: `web/src/router/modules/ddrag.ts`
 - Modify: `web/src/router/modules/index.ts` (add export)
 
-- [ ] **Step 1: Create `web/src/router/modules/ddrag.ts`**
+\- \[x\] **Step 1: Create `web/src/router/modules/ddrag.ts`**
 
 ```ts
 import type { AppRouteRecord } from '@/types/router'
@@ -189,11 +189,11 @@ const ddragRoutes: AppRouteRecord[] = [
 export default ddragRoutes
 ```
 
-- [ ] **Step 2: Add ddrag module export to `web/src/router/modules/index.ts`**
+\- \[x\] **Step 2: Add ddrag module export to `web/src/router/modules/index.ts`**
 
 Add `export { default as ddragRoutes } from './ddrag'` to the existing exports file.
 
-- [ ] **Step 3: Commit route module**
+\- \[x\] **Step 3: Commit route module**
 
 ```bash
 git add web/src/router/modules/ddrag.ts web/src/router/modules/index.ts
@@ -207,7 +207,7 @@ git commit -m "feat: add ddrag route module for DD_Rag business pages"
 **Files:**
 - Create: `web/src/store/modules/ddrag-auth.ts`
 
-- [ ] **Step 1: Create `web/src/store/modules/ddrag-auth.ts`**
+\- \[x\] **Step 1: Create `web/src/store/modules/ddrag-auth.ts`**
 
 ```ts
 import { defineStore } from 'pinia'
@@ -292,7 +292,7 @@ export const useDdragAuthStore = defineStore(
 )
 ```
 
-- [ ] **Step 2: Commit auth store**
+\- \[x\] **Step 2: Commit auth store**
 
 ```bash
 git add web/src/store/modules/ddrag-auth.ts
@@ -306,7 +306,7 @@ git commit -m "feat: add ddrag-auth Pinia store for DD_Rag authentication"
 **Files:**
 - Create: `web/src/store/modules/ddrag-group.ts`
 
-- [ ] **Step 1: Create `web/src/store/modules/ddrag-group.ts`**
+\- \[x\] **Step 1: Create `web/src/store/modules/ddrag-group.ts`**
 
 ```ts
 import { defineStore } from 'pinia'
@@ -391,7 +391,7 @@ export const useDdragGroupStore = defineStore(
 )
 ```
 
-- [ ] **Step 2: Commit group store**
+\- \[x\] **Step 2: Commit group store**
 
 ```bash
 git add web/src/store/modules/ddrag-group.ts
@@ -407,7 +407,7 @@ git commit -m "feat: add ddrag-group Pinia store for group context management"
 - Create: `web/src/hooks/useResumableUpload.ts`
 - Create: `web/src/hooks/useGroupContext.ts`
 
-- [ ] **Step 1: Create `web/src/hooks/useSSEStream.ts`**
+\- \[x\] **Step 1: Create `web/src/hooks/useSSEStream.ts`**
 
 ```ts
 import { ref, onUnmounted } from 'vue'
@@ -501,7 +501,7 @@ export function useSSEStream() {
 }
 ```
 
-- [ ] **Step 2: Create `web/src/hooks/useResumableUpload.ts`**
+\- \[x\] **Step 2: Create `web/src/hooks/useResumableUpload.ts`**
 
 ```ts
 import { ref, computed } from 'vue'
@@ -556,7 +556,7 @@ export function useResumableUpload() {
 }
 ```
 
-- [ ] **Step 3: Create `web/src/hooks/useGroupContext.ts`**
+\- \[x\] **Step 3: Create `web/src/hooks/useGroupContext.ts`**
 
 ```ts
 import { computed } from 'vue'
@@ -587,7 +587,7 @@ export function useGroupContext() {
 }
 ```
 
-- [ ] **Step 4: Commit composables**
+\- \[x\] **Step 4: Commit composables**
 
 ```bash
 git add web/src/hooks/useSSEStream.ts web/src/hooks/useResumableUpload.ts web/src/hooks/useGroupContext.ts
@@ -607,23 +607,23 @@ git commit -m "feat: add SSE stream, resumable upload, and group context composa
 - Create: `web/src/api/ddrag/admin-user.ts`
 - Create: `web/src/types/ddrag/index.ts` (all types in one file)
 
-- [ ] **Step 1: Create `web/src/types/ddrag/index.ts`** with all DD_Rag types
+\- \[x\] **Step 1: Create `web/src/types/ddrag/index.ts`** with all DD_Rag types
 
 (Contains SystemRole, CurrentUserProfile, GroupItem, PendingInvitationItem, DocumentItem, CitationItem, AskQuestionPayload, AskQuestionResponse, AssistantSessionListItem, AssistantSessionDetail, AssistantMessageItem, AssistantConversationContext, AssistantChatPayload, AssistantChatResult, AssistantChatStreamEvent, AssistantCitationItem, AdminUserItem, UserStatus — copied verbatim from DD_Rag frontend types)
 
-- [ ] **Step 2: Create `web/src/api/ddrag/auth.ts`** (mock functions returning fake data)
+\- \[x\] **Step 2: Create `web/src/api/ddrag/auth.ts`** (mock functions returning fake data)
 
-- [ ] **Step 3: Create `web/src/api/ddrag/group.ts`** (mock functions returning fake groups)
+\- \[x\] **Step 3: Create `web/src/api/ddrag/group.ts`** (mock functions returning fake groups)
 
-- [ ] **Step 4: Create `web/src/api/ddrag/document.ts`** (mock functions returning fake documents)
+\- \[x\] **Step 4: Create `web/src/api/ddrag/document.ts`** (mock functions returning fake documents)
 
-- [ ] **Step 5: Create `web/src/api/ddrag/qa.ts`** (mock functions returning fake Q&A responses)
+\- \[x\] **Step 5: Create `web/src/api/ddrag/qa.ts`** (mock functions returning fake Q&A responses)
 
-- [ ] **Step 6: Create `web/src/api/ddrag/assistant.ts`** (mock functions returning fake sessions)
+\- \[x\] **Step 6: Create `web/src/api/ddrag/assistant.ts`** (mock functions returning fake sessions)
 
-- [ ] **Step 7: Create `web/src/api/ddrag/admin-user.ts`** (mock functions returning fake users)
+\- \[x\] **Step 7: Create `web/src/api/ddrag/admin-user.ts`** (mock functions returning fake users)
 
-- [ ] **Step 8: Commit API modules**
+\- \[x\] **Step 8: Commit API modules**
 
 ```bash
 git add web/src/api/ddrag/ web/src/types/ddrag/
@@ -637,17 +637,17 @@ git commit -m "feat: add DD_Rag API modules with mock data for design phase"
 **Files:**
 - Modify: `web/src/views/auth/login/index.vue`
 
-- [ ] **Step 1: Modify login page — remove art-design-pro's account selector, add DD_Rag's username+password form**
+\- \[x\] **Step 1: Modify login page — remove art-design-pro's account selector, add DD_Rag's username+password form**
 
 Replace the login form section: remove `ElSelect` account dropdown, keep `ElInput` username and password fields. Remove drag verify (ArtDragVerify) component. Remove "rememberPassword" checkbox. Add "忘记密码" link pointing to `/auth/forget-password`. Remove i18n usage — use Chinese text directly.
 
 Login `handleSubmit` in design phase uses mock: call `useDdragAuthStore().setSession('mock-token', mockUser)` and redirect to homePath.
 
-- [ ] **Step 2: Verify login page via /browse**
+\- \[x\] **Step 2: Verify login page via /browse**
 
 Run `pnpm dev`, open `/auth/login`, verify: username input, password input, submit button, "忘记密码" link, no drag verify, no account selector.
 
-- [ ] **Step 3: Commit login page design**
+\- \[x\] **Step 3: Commit login page design**
 
 ```bash
 git add web/src/views/auth/login/
@@ -661,13 +661,13 @@ git commit -m "feat: redesign login page for DD_Rag (mock data, design phase)"
 **Files:**
 - Modify: `web/src/views/auth/register/index.vue`
 
-- [ ] **Step 1: Modify register page — add DD_Rag fields (username, email, displayName, password)**
+\- \[x\] **Step 1: Modify register page — add DD_Rag fields (username, email, displayName, password)**
 
 Replace art-design-pro's register form with DD_Rag fields: username, email, displayName, password (with validation: ≥8 chars, alpha+digit). Mock submit redirects to `/auth/login`.
 
-- [ ] **Step 2: Verify register page via /browse**
+\- \[x\] **Step 2: Verify register page via /browse**
 
-- [ ] **Step 3: Commit register page design**
+\- \[x\] **Step 3: Commit register page design**
 
 ---
 
@@ -677,7 +677,7 @@ Replace art-design-pro's register form with DD_Rag fields: username, email, disp
 - Create: `web/src/views/account/security/index.vue`
 - Modify: `web/src/router/routes/staticRoutes.ts` (add `/account/security` route)
 
-- [ ] **Step 1: Create account security page**
+\- \[x\] **Step 1: Create account security page**
 
 ```vue
 <template>
@@ -766,13 +766,13 @@ const handleSubmit = async () => {
 </style>
 ```
 
-- [ ] **Step 2: Add route to staticRoutes.ts**
+\- \[x\] **Step 2: Add route to staticRoutes.ts**
 
 Add entry for `/account/security` with `meta: { requiresAuth: true, title: '修改密码' }`.
 
-- [ ] **Step 3: Verify via /browse**
+\- \[x\] **Step 3: Verify via /browse**
 
-- [ ] **Step 4: Commit account security page**
+\- \[x\] **Step 4: Commit account security page**
 
 ---
 
@@ -784,7 +784,7 @@ Add entry for `/account/security` with `meta: { requiresAuth: true, title: '修�
 - Create: `web/src/views/ddrag/groups/components/GroupSelector.vue`
 - Create: `web/src/views/ddrag/groups/mock.ts`
 
-- [ ] **Step 1: Create mock data file `mock.ts`**
+\- \[x\] **Step 1: Create mock data file `mock.ts`**
 
 ```ts
 export const mockOwnedGroups = [
@@ -807,17 +807,17 @@ export const mockMembers = [
 ]
 ```
 
-- [ ] **Step 2: Create GroupsPage Vue component with tabs (owned/joined), invitations section, create group dialog**
+\- \[x\] **Step 2: Create GroupsPage Vue component with tabs (owned/joined), invitations section, create group dialog**
 
 Use `ElTabs` with two tab panes. Each tab has `ArtTable` or `ElTable`. Invitations shown as `ElCard` list above tabs. Create group uses `ElDialog` + `ElForm`. Detail uses `GroupDetailDrawer`.
 
-- [ ] **Step 3: Create GroupDetailDrawer.vue** — `ElDrawer` with member list, invitation input, leave group button
+\- \[x\] **Step 3: Create GroupDetailDrawer.vue** — `ElDrawer` with member list, invitation input, leave group button
 
-- [ ] **Step 4: Create GroupSelector.vue** — `ElSelect` bound to `useDdragGroupStore().currentGroupId`
+\- \[x\] **Step 4: Create GroupSelector.vue** — `ElSelect` bound to `useDdragGroupStore().currentGroupId`
 
-- [ ] **Step 5: Verify groups page via /browse**
+\- \[x\] **Step 5: Verify groups page via /browse**
 
-- [ ] **Step 6: Commit groups page design**
+\- \[x\] **Step 6: Commit groups page design**
 
 ---
 
@@ -827,15 +827,15 @@ Use `ElTabs` with two tab panes. Each tab has `ArtTable` or `ElTable`. Invitatio
 - Create: `web/src/views/ddrag/documents/index.vue`
 - Create: `web/src/views/ddrag/documents/mock.ts`
 
-- [ ] **Step 1: Create mock data with 8 documents across all statuses**
+\- \[x\] **Step 1: Create mock data with 8 documents across all statuses**
 
-- [ ] **Step 2: Create DocumentsPage — ArtForm search bar (status filter + group selector) + ArtTable + upload dialog**
+\- \[x\] **Step 2: Create DocumentsPage — ArtForm search bar (status filter + group selector) + ArtTable + upload dialog**
 
 `ElTable` columns: filename, upload time (formatted), status (`ElTag` with color: PENDING=info, PROCESSING=warning, COMPLETED=success, FAILED=danger), actions (preview/delete/retry buttons). Upload dialog uses `useResumableUpload` composable with progress bar. Preview uses `ElDialog`.
 
-- [ ] **Step 3: Verify documents page via /browse**
+\- \[x\] **Step 3: Verify documents page via /browse**
 
-- [ ] **Step 4: Commit documents page design**
+\- \[x\] **Step 4: Commit documents page design**
 
 ---
 
@@ -845,15 +845,15 @@ Use `ElTabs` with two tab panes. Each tab has `ArtTable` or `ElTable`. Invitatio
 - Create: `web/src/views/ddrag/qa/index.vue`
 - Create: `web/src/views/ddrag/qa/mock.ts`
 
-- [ ] **Step 1: Create mock Q&A data (2-3 question-answer pairs with citations)**
+\- \[x\] **Step 1: Create mock Q&A data (2-3 question-answer pairs with citations)**
 
-- [ ] **Step 2: Create QaPage — top prompt input + bottom conversation display**
+\- \[x\] **Step 2: Create QaPage — top prompt input + bottom conversation display**
 
 Top: `ElInput` textarea + group selector + "提问" button. Bottom: alternating user/AI message cards. Citation list as `ElCard` grid below answer.
 
-- [ ] **Step 3: Verify QA page via /browse**
+\- \[x\] **Step 3: Verify QA page via /browse**
 
-- [ ] **Step 4: Commit QA page design**
+\- \[x\] **Step 4: Commit QA page design**
 
 ---
 
@@ -863,15 +863,15 @@ Top: `ElInput` textarea + group selector + "提问" button. Bottom: alternating 
 - Create: `web/src/views/ddrag/assistant/index.vue`
 - Create: `web/src/views/ddrag/assistant/mock.ts`
 
-- [ ] **Step 1: Create mock session data (3 sessions with conversation history)**
+\- \[x\] **Step 1: Create mock session data (3 sessions with conversation history)**
 
-- [ ] **Step 2: Create AssistantPage — two-column layout (session list | chat panel with bottom composer)**
+\- \[x\] **Step 2: Create AssistantPage — two-column layout (session list | chat panel with bottom composer)**
 
 Left column: `ElScrollbar` list of sessions with create/rename/delete buttons. Right column: chat messages (`ElScrollbar`) + bottom composer (`ElInput` textarea + group selector + KB_SEARCH `ElSwitch` + send button). Route meta `noKeepAlive: true`.
 
-- [ ] **Step 3: Verify assistant page via /browse**
+\- \[x\] **Step 3: Verify assistant page via /browse**
 
-- [ ] **Step 4: Commit assistant page design**
+\- \[x\] **Step 4: Commit assistant page design**
 
 ---
 
@@ -883,17 +883,17 @@ Left column: `ElScrollbar` list of sessions with create/rename/delete buttons. R
 - Create: `web/src/views/ddrag/management/user-detail/index.vue`
 - Create: `web/src/views/ddrag/management/mock.ts`
 
-- [ ] **Step 1: Create mock management data (stats + 10 user records)**
+\- \[x\] **Step 1: Create mock management data (stats + 10 user records)**
 
-- [ ] **Step 2: Create OverviewPage — ArtStatsCard row + ArtBarChartCard**
+\- \[x\] **Step 2: Create OverviewPage — ArtStatsCard row + ArtBarChartCard**
 
-- [ ] **Step 3: Create UsersPage — ElTable with user list + search bar**
+\- \[x\] **Step 3: Create UsersPage — ElTable with user list + search bar**
 
-- [ ] **Step 4: Create UserDetailPage — ElDescriptions + status toggle**
+\- \[x\] **Step 4: Create UserDetailPage — ElDescriptions + status toggle**
 
-- [ ] **Step 5: Verify management pages via /browse**
+\- \[x\] **Step 5: Verify management pages via /browse**
 
-- [ ] **Step 6: Commit management pages design**
+\- \[x\] **Step 6: Commit management pages design**
 
 ---
 
@@ -902,16 +902,16 @@ Left column: `ElScrollbar` list of sessions with create/rename/delete buttons. R
 **Files:**
 - Modify: `web/src/router/guards/beforeEach.ts`
 
-- [ ] **Step 1: Add DD_Rag role enforcement logic to beforeEach guard**
+\- \[x\] **Step 1: Add DD_Rag role enforcement logic to beforeEach guard**
 
 After the existing auth check, add:
 1. Check `useDdragAuthStore().currentUser.mustChangePassword` → redirect to `/account/security`
 2. Check `useDdragAuthStore().isAdmin` + path starts with business prefix → redirect to `/management/overview`
 3. Check `useDdragAuthStore().isUser` + path starts with `/management` → redirect to `/groups`
 
-- [ ] **Step 2: Verify guards work — test ADMIN on /groups, USER on /management**
+\- \[x\] **Step 2: Verify guards work — test ADMIN on /groups, USER on /management**
 
-- [ ] **Step 3: Commit route guard modifications**
+\- \[x\] **Step 3: Commit route guard modifications**
 
 ---
 
@@ -920,17 +920,17 @@ After the existing auth check, add:
 **Files:**
 - Modify: `web/src/views/index/index.vue` or menu config
 
-- [ ] **Step 1: Add DD_Rag menu items to sidebar**
+\- \[x\] **Step 1: Add DD_Rag menu items to sidebar**
 
 Ensure the ddrag route module's menu items appear in the sidebar alongside existing demo items. Verify: Groups, Documents, QA, Assistant, Management menus are visible and clickable.
 
-- [ ] **Step 2: Set default landing route to `/groups`**
+\- \[x\] **Step 2: Set default landing route to `/groups`**
 
 Ensure `/` redirects to `/groups` for USER role, `/management/overview` for ADMIN role.
 
-- [ ] **Step 3: Verify full navigation flow via /browse**
+\- \[x\] **Step 3: Verify full navigation flow via /browse**
 
-- [ ] **Step 4: Commit sidebar navigation**
+\- \[x\] **Step 4: Commit sidebar navigation**
 
 ---
 
@@ -940,15 +940,15 @@ Ensure `/` redirects to `/groups` for USER role, `/management/overview` for ADMI
 - Modify: `web/src/api/ddrag/auth.ts` (replace mock with real Axios calls)
 - Modify: `web/src/views/auth/login/index.vue` (call real API)
 
-- [ ] **Step 1: Replace mock auth functions with real Axios calls using art-design-pro's HTTP wrapper**
+\- \[x\] **Step 1: Replace mock auth functions with real Axios calls using art-design-pro's HTTP wrapper**
 
 Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `logout`, `fetchCurrentUser`, `changePassword`. Adapt to art-design-pro's `http` instance (baseURL `/api`, `withCredentials: true`).
 
-- [ ] **Step 2: Modify login page to call real `login` API**
+\- \[x\] **Step 2: Modify login page to call real `login` API**
 
-- [ ] **Step 3: Verify real login flow with DD_Rag backend**
+\- \[x\] **Step 3: Verify real login flow with DD_Rag backend**
 
-- [ ] **Step 4: Commit auth API integration**
+\- \[x\] **Step 4: Commit auth API integration**
 
 ---
 
@@ -958,13 +958,13 @@ Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `l
 - Modify: `web/src/api/ddrag/group.ts`
 - Modify: `web/src/views/ddrag/groups/index.vue`
 
-- [ ] **Step 1: Replace mock group functions with real API calls**
+\- \[x\] **Step 1: Replace mock group functions with real API calls**
 
-- [ ] **Step 2: Connect groups page to real API**
+\- \[x\] **Step 2: Connect groups page to real API**
 
-- [ ] **Step 3: Verify groups page with real backend data**
+\- \[x\] **Step 3: Verify groups page with real backend data**
 
-- [ ] **Step 4: Commit group API integration**
+\- \[x\] **Step 4: Commit group API integration**
 
 ---
 
@@ -975,15 +975,15 @@ Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `l
 - Modify: `web/src/views/ddrag/documents/index.vue`
 - Modify: `web/src/hooks/useResumableUpload.ts` (replace mock with real upload lifecycle)
 
-- [ ] **Step 1: Replace mock document functions with real API calls**
+\- \[x\] **Step 1: Replace mock document functions with real API calls**
 
-- [ ] **Step 2: Replace mock upload composable with real chunk upload lifecycle**
+\- \[x\] **Step 2: Replace mock upload composable with real chunk upload lifecycle**
 
-- [ ] **Step 3: Connect documents page to real API**
+\- \[x\] **Step 3: Connect documents page to real API**
 
-- [ ] **Step 4: Verify documents page with real backend data**
+\- \[x\] **Step 4: Verify documents page with real backend data**
 
-- [ ] **Step 5: Commit document API integration**
+\- \[x\] **Step 5: Commit document API integration**
 
 ---
 
@@ -993,13 +993,13 @@ Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `l
 - Modify: `web/src/api/ddrag/qa.ts`
 - Modify: `web/src/views/ddrag/qa/index.vue`
 
-- [ ] **Step 1: Replace mock QA function with real `POST /qa/ask`**
+\- \[x\] **Step 1: Replace mock QA function with real `POST /qa/ask`**
 
-- [ ] **Step 2: Connect QA page to real API**
+\- \[x\] **Step 2: Connect QA page to real API**
 
-- [ ] **Step 3: Verify QA page with real backend data**
+\- \[x\] **Step 3: Verify QA page with real backend data**
 
-- [ ] **Step 4: Commit QA API integration**
+\- \[x\] **Step 4: Commit QA API integration**
 
 ---
 
@@ -1010,15 +1010,15 @@ Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `l
 - Modify: `web/src/views/ddrag/assistant/index.vue`
 - Modify: `web/src/hooks/useSSEStream.ts` (replace mock SSE with real stream)
 
-- [ ] **Step 1: Replace mock assistant functions with real API calls**
+\- \[x\] **Step 1: Replace mock assistant functions with real API calls**
 
-- [ ] **Step 2: Replace mock SSE composable with real `fetch` + SSE parsing**
+\- \[x\] **Step 2: Replace mock SSE composable with real `fetch` + SSE parsing**
 
-- [ ] **Step 3: Connect assistant page to real API**
+\- \[x\] **Step 3: Connect assistant page to real API**
 
-- [ ] **Step 4: Verify assistant chat with real SSE streaming**
+\- \[x\] **Step 4: Verify assistant chat with real SSE streaming**
 
-- [ ] **Step 5: Commit assistant API integration**
+\- \[x\] **Step 5: Commit assistant API integration**
 
 ---
 
@@ -1030,10 +1030,10 @@ Port DD_Rag's `auth.ts` API functions: `login`, `register`, `refreshSession`, `l
 - Modify: `web/src/views/ddrag/management/users/index.vue`
 - Modify: `web/src/views/ddrag/management/user-detail/index.vue`
 
-- [ ] **Step 1: Replace mock admin-user functions with real API calls**
+\- \[x\] **Step 1: Replace mock admin-user functions with real API calls**
 
-- [ ] **Step 2: Connect management pages to real API**
+\- \[x\] **Step 2: Connect management pages to real API**
 
-- [ ] **Step 3: Verify management pages with real backend data**
+\- \[x\] **Step 3: Verify management pages with real backend data**
 
-- [ ] **Step 4: Commit management API integration**
+\- \[x\] **Step 4: Commit management API integration**
