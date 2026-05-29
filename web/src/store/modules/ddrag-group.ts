@@ -67,7 +67,6 @@ export const useDdragGroupStore = defineStore(
     persist: {
       key: StorageConfig.generateStorageKey('ddrag-group'),
       storage: localStorage,
-      paths: ['currentGroupId'],
     },
   },
 )

@@ -151,8 +151,8 @@ const formatFileSize = (bytes: number) => {
 
 const formatTime = (iso: string) => new Date(iso).toLocaleString('zh-CN')
 
-const statusTagType = (status: string) => {
-  const map: Record<string, string> = { PENDING: 'info', PROCESSING: 'warning', COMPLETED: 'success', FAILED: 'danger' }
-  return map[status] ?? ''
+const statusTagType = (status: string): 'info' | 'warning' | 'success' | 'danger' | 'primary' => {
+  const map: Record<string, 'info' | 'warning' | 'success' | 'danger'> = { PENDING: 'info', PROCESSING: 'warning', COMPLETED: 'success', FAILED: 'danger' }
+  return map[status] ?? 'info'
 }
 </script>

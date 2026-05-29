@@ -60,7 +60,7 @@
           <div v-if="conv.citations.length > 0" class="ml-2 mb-4">
             <h5 class="text-sm font-semibold mb-2 text-gray-600">引用来源</h5>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <ElCard v-for="c in conv.citations" :key="c.chunkId ?? c.documentId" shadow="hover" class="text-sm">
+              <ElCard v-for="(c, idx) in conv.citations" :key="idx" shadow="hover" class="text-sm">
                 <p class="font-medium mb-1">{{ c.fileName }}</p>
                 <p class="text-xs text-gray-500 mb-1">相关度: {{ (c.score * 100).toFixed(0) }}%</p>
                 <p class="text-gray-600 line-clamp-3">{{ c.snippet }}</p>

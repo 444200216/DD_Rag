@@ -177,19 +177,16 @@
     try {
       switching.value = true
 
-      // 模拟登录请求
-      const { token, refreshToken } = await fetchLogin({
-        userName: account.userName,
+      const result = await fetchLogin({
+        loginId: account.userName,
         password: account.password
       })
 
-      // 验证token
-      if (!token) {
+      if (!result.accessToken) {
         throw new Error('Login failed - no token received')
       }
 
-      // 存储token和用户信息
-      userStore.setToken(token, refreshToken)
+      userStore.setToken(result.accessToken)
       const userInfo = await fetchGetUserInfo()
       userStore.setUserInfo(userInfo)
 

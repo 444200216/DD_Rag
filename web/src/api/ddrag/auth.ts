@@ -2,52 +2,28 @@ import type {
   LoginPayload, RegisterPayload, ChangePasswordPayload,
   AuthSessionResponse, CurrentUserProfile,
 } from '@/types/ddrag'
-
-const mockUser: CurrentUserProfile = {
-  userId: 1,
-  userCode: 'u001',
-  displayName: '张锋',
-  systemRole: 'USER',
-  mustChangePassword: false,
-}
-
-const mockAdmin: CurrentUserProfile = {
-  userId: 2,
-  userCode: 'u002',
-  displayName: '管理员',
-  systemRole: 'ADMIN',
-  mustChangePassword: false,
-}
+import { ddragPost, ddragGet } from '@/utils/http/ddrag'
 
 export async function login(payload: LoginPayload): Promise<AuthSessionResponse> {
-  await delay(300)
-  // Use admin role if loginId contains 'admin'
-  const user = payload.loginId.includes('admin') ? mockAdmin : mockUser
-  return { accessToken: 'mock-jwt-token-' + Date.now(), currentUser: user }
+  return ddragPost<AuthSessionResponse>('/auth/login', payload)
 }
 
-export async function register(_payload: RegisterPayload): Promise<void> {
-  await delay(300)
+export async function register(payload: RegisterPayload): Promise<void> {
+  await ddragPost<void>('/auth/register', payload)
 }
 
 export async function refreshSession(): Promise<AuthSessionResponse> {
-  await delay(200)
-  return { accessToken: 'mock-refreshed-token', currentUser: mockUser }
+  return ddragPost<AuthSessionResponse>('/auth/refresh')
 }
 
 export async function logout(): Promise<void> {
-  await delay(100)
+  await ddragPost<void>('/auth/logout')
 }
 
 export async function fetchCurrentUser(): Promise<CurrentUserProfile> {
-  await delay(100)
-  return mockUser
+  return ddragGet<CurrentUserProfile>('/auth/me')
 }
 
-export async function changePassword(_payload: ChangePasswordPayload): Promise<void> {
-  await delay(300)
-}
-
-function delay(ms: number) {
-  return new Promise((r) => setTimeout(r, ms))
+export async function changePassword(payload: ChangePasswordPayload): Promise<void> {
+  await ddragPost<void>('/account/change-password', payload)
 }

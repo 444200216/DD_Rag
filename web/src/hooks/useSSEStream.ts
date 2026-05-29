@@ -1,9 +1,9 @@
 import { ref, onUnmounted } from 'vue'
+import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
 
 export interface SSEStreamOptions {
   url: string
   body?: Record<string, unknown>
-  accessToken?: string
 }
 
 export function useSSEStream() {
@@ -19,13 +19,14 @@ export function useSSEStream() {
     isStreaming.value = true
     abortController = new AbortController()
 
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/$/, '')
+    const authStore = useDdragAuthStore()
+    const baseUrl = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
     try {
       const response = await fetch(`${baseUrl}${options.url}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(options.accessToken ? { Authorization: `Bearer ${options.accessToken}` } : {}),
+          ...(authStore.accessToken ? { Authorization: `Bearer ${authStore.accessToken}` } : {}),
         },
         body: options.body ? JSON.stringify(options.body) : undefined,
         signal: abortController.signal,

@@ -14,7 +14,7 @@
         <ElDescriptionsItem label="邮箱">{{ user?.email }}</ElDescriptionsItem>
         <ElDescriptionsItem label="代码">{{ user?.userCode }}</ElDescriptionsItem>
         <ElDescriptionsItem label="系统角色">
-          <ElTag :type="user?.systemRole === 'ADMIN' ? 'danger' : ''">{{ user?.systemRole }}</ElTag>
+          <ElTag :type="user?.systemRole === 'ADMIN' ? 'danger' : 'info'">{{ user?.systemRole }}</ElTag>
         </ElDescriptionsItem>
         <ElDescriptionsItem label="状态">
           <ElTag :type="user?.status === 'ACTIVE' ? 'success' : 'danger'">{{ user?.status }}</ElTag>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { StorageConfig } from '@/utils/storage/storage-config'
+import { ddragPost } from '@/utils/http/ddrag'
 
 const ADMIN_HOME_PATH = '/management/overview'
 const USER_HOME_PATH = '/groups'
@@ -40,6 +41,15 @@ export const useDdragAuthStore = defineStore(
       currentUser.value = null
     }
 
+    async function logout() {
+      try {
+        await ddragPost<void>('/auth/logout')
+      } catch {
+        // Logout API may fail; still clear local session
+      }
+      clearSession()
+    }
+
     function resolveLandingPath(user: CurrentUserProfile | null): string {
       if (user === null) return '/auth/login'
       if (user.mustChangePassword) return ACCOUNT_SECURITY_PATH
@@ -58,14 +68,14 @@ export const useDdragAuthStore = defineStore(
     return {
       accessToken, currentUser, isBootstrapping, isAuthenticating,
       isAuthenticated, isAdmin, isUser, homePath,
-      setSession, clearSession, resolveLandingPath, resolveRedirectForPath,
+      setSession, clearSession, logout,
+      resolveLandingPath, resolveRedirectForPath,
     }
   },
   {
     persist: {
       key: StorageConfig.generateStorageKey('ddrag-auth'),
       storage: localStorage,
-      paths: ['accessToken', 'currentUser'],
     },
   },
 )

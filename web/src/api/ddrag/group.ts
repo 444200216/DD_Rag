@@ -2,66 +2,40 @@ import type {
   GroupQueryResult, CreateGroupPayload, GroupMemberItem,
   PendingInvitationItem, OwnerJoinRequestItem,
 } from '@/types/ddrag'
-
-const mockOwnedGroups = [
-  { groupId: 1, groupCode: 'team-alpha', groupName: 'Alpha研发组' },
-  { groupId: 2, groupCode: 'team-beta', groupName: 'Beta产品组' },
-]
-
-const mockJoinedGroups = [
-  { groupId: 3, groupCode: 'team-gamma', groupName: 'Gamma测试组' },
-]
-
-const mockPendingInvitations: PendingInvitationItem[] = [
-  { invitationId: 10, groupId: 4, groupName: 'Delta运维组', inviterUserId: 99, inviterDisplayName: '李四', status: 'PENDING' },
-]
-
-const mockMembers: GroupMemberItem[] = [
-  { userId: 1, userCode: 'u001', displayName: '张锋', role: 'OWNER' },
-  { userId: 5, userCode: 'u005', displayName: '李明', role: 'MEMBER' },
-  { userId: 8, userCode: 'u008', displayName: '王芳', role: 'MEMBER' },
-]
+import { ddragGet, ddragPost, ddragDelete } from '@/utils/http/ddrag'
 
 export async function fetchGroups(): Promise<GroupQueryResult> {
-  await delay(200)
-  return { ownedGroups: mockOwnedGroups, joinedGroups: mockJoinedGroups, pendingInvitations: mockPendingInvitations }
+  return ddragGet<GroupQueryResult>('/groups/my')
 }
 
 export async function createGroup(payload: CreateGroupPayload): Promise<number> {
-  await delay(300)
-  return 100 + Math.floor(Math.random() * 900)
+  return ddragPost<number>('/groups', payload)
 }
 
-export async function acceptInvitation(_invitationId: number): Promise<void> {
-  await delay(200)
+export async function acceptInvitation(invitationId: number): Promise<void> {
+  await ddragPost<void>(`/invitations/${invitationId}/accept`)
 }
 
-export async function rejectInvitation(_invitationId: number): Promise<void> {
-  await delay(200)
+export async function rejectInvitation(invitationId: number): Promise<void> {
+  await ddragPost<void>(`/invitations/${invitationId}/reject`)
 }
 
-export async function fetchGroupMembers(_groupId: number): Promise<GroupMemberItem[]> {
-  await delay(200)
-  return mockMembers
+export async function fetchGroupMembers(groupId: number): Promise<GroupMemberItem[]> {
+  return ddragGet<GroupMemberItem[]>(`/groups/${groupId}/members`)
 }
 
-export async function leaveGroup(_groupId: number): Promise<void> {
-  await delay(200)
+export async function leaveGroup(groupId: number): Promise<void> {
+  await ddragPost<void>(`/groups/${groupId}/leave`)
 }
 
-export async function fetchOwnerJoinRequests(_groupId: number): Promise<OwnerJoinRequestItem[]> {
-  await delay(200)
-  return []
+export async function fetchOwnerJoinRequests(groupId: number): Promise<OwnerJoinRequestItem[]> {
+  return ddragGet<OwnerJoinRequestItem[]>(`/groups/${groupId}/join-requests`)
 }
 
-export async function approveJoinRequest(_groupId: number, _requestId: number): Promise<void> {
-  await delay(200)
+export async function approveJoinRequest(groupId: number, requestId: number): Promise<void> {
+  await ddragPost<void>(`/groups/${groupId}/join-requests/${requestId}/approve`)
 }
 
-export async function rejectJoinRequest(_groupId: number, _requestId: number): Promise<void> {
-  await delay(200)
-}
-
-function delay(ms: number) {
-  return new Promise((r) => setTimeout(r, ms))
+export async function rejectJoinRequest(groupId: number, requestId: number): Promise<void> {
+  await ddragPost<void>(`/groups/${groupId}/join-requests/${requestId}/reject`)
 }

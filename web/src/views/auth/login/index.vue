@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
 import { useUserStore } from '@/store/modules/user'
+import { fetchLogin } from '@/api/auth'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 
 defineOptions({ name: 'Login' })
@@ -87,11 +88,10 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    const { login } = await import('@/api/ddrag/auth')
-    const result = await login({ loginId: formData.loginId, password: formData.password })
+    const result = await fetchLogin({ loginId: formData.loginId, password: formData.password })
     authStore.setSession(result.accessToken, result.currentUser)
-    userStore.setLoginStatus(true)
     userStore.setToken(result.accessToken)
+    userStore.setLoginStatus(true)
 
     ElNotification({
       title: '登录成功',

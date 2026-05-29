@@ -35,6 +35,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElNotification, type FormInstance, type FormRules } from 'element-plus'
 import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
+import { changePassword } from '@/api/ddrag/auth'
 
 defineOptions({ name: 'AccountSecurity' })
 
@@ -74,7 +75,6 @@ const handleSubmit = async () => {
   if (!valid) return
   loading.value = true
   try {
-    const { changePassword } = await import('@/api/ddrag/auth')
     await changePassword({ currentPassword: formData.currentPassword, newPassword: formData.newPassword })
     if (authStore.currentUser) authStore.currentUser.mustChangePassword = false
     ElNotification({ title: '密码修改成功', type: 'success', duration: 2500, zIndex: 10000 })

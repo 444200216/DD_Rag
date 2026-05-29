@@ -1,48 +1,43 @@
 import { ref, computed } from 'vue'
+import { uploadDocumentSimple } from '@/api/ddrag/document'
 
-type UploadPhase = 'idle' | 'init' | 'uploading' | 'polling' | 'completed' | 'failed'
+type UploadPhase = 'idle' | 'init' | 'uploading' | 'completed' | 'failed'
 
 export function useResumableUpload() {
   const phase = ref<UploadPhase>('idle')
   const progress = ref(0)
   const errorMessage = ref<string | null>(null)
-  const uploadId = ref<string | null>(null)
 
   const isUploading = computed(() => phase.value === 'init' || phase.value === 'uploading')
 
-  async function startUpload(_file: File, _groupId: number) {
+  async function startUpload(file: File, groupId: number) {
     phase.value = 'init'
     progress.value = 0
     errorMessage.value = null
 
-    for (let i = 0; i <= 100; i += 5) {
-      progress.value = i
-      await new Promise((r) => setTimeout(r, 100))
+    try {
+      phase.value = 'uploading'
+      progress.value = 50
+      await uploadDocumentSimple(groupId, file)
+      progress.value = 100
+      phase.value = 'completed'
+    } catch (e) {
+      errorMessage.value = e instanceof Error ? e.message : '上传失败'
+      phase.value = 'failed'
     }
-
-    phase.value = 'completed'
-    progress.value = 100
-  }
-
-  async function retry() {
-    if (phase.value !== 'failed') return
-    phase.value = 'idle'
-    errorMessage.value = null
   }
 
   function cancel() {
     phase.value = 'idle'
     progress.value = 0
     errorMessage.value = null
-    uploadId.value = null
   }
 
   function reset() {
     phase.value = 'idle'
     progress.value = 0
     errorMessage.value = null
-    uploadId.value = null
   }
 
-  return { phase, progress, errorMessage, isUploading, startUpload, retry, cancel, reset }
+  return { phase, progress, errorMessage, isUploading, startUpload, cancel, reset }
 }
