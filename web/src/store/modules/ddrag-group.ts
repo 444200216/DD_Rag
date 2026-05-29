@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { StorageConfig } from '@/utils/storage/storage-config'
+import { fetchGroups } from '@/api/ddrag/group'
+import type { GroupQueryResult } from '@/types/ddrag'
 
 export type GroupRelation = 'OWNER' | 'MEMBER'
 
@@ -57,10 +59,25 @@ export const useDdragGroupStore = defineStore(
       pendingInvitations.value = payload.pendingInvitations
     }
 
+    async function loadGroupsIfNeeded() {
+      if (visibleGroups.value.length > 0 || isGroupsLoading.value) return
+      isGroupsLoading.value = true
+      try {
+        const result: GroupQueryResult = await fetchGroups()
+        setGroupCollections({
+          ownedGroups: result.ownedGroups,
+          joinedGroups: result.joinedGroups,
+          pendingInvitations: result.pendingInvitations || [],
+        })
+      } finally {
+        isGroupsLoading.value = false
+      }
+    }
+
     return {
       currentGroupId, ownedGroups, joinedGroups, pendingInvitations, isGroupsLoading,
       visibleGroups, currentGroup, canManageCurrentGroup,
-      setCurrentGroupId, setGroupCollections,
+      setCurrentGroupId, setGroupCollections, loadGroupsIfNeeded,
     }
   },
   {

@@ -1,5 +1,5 @@
 <template>
-  <ElSelect v-model="selectedGroupId" placeholder="选择组" @change="handleChange" clearable>
+  <ElSelect v-model="selectedGroupId" placeholder="选择组" @change="handleChange" clearable :loading="groupStore.isGroupsLoading">
     <ElOption
       v-for="group in groupStore.visibleGroups"
       :key="group.groupId"
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useDdragGroupStore } from '@/store/modules/ddrag-group'
 
 defineOptions({ name: 'GroupSelector' })
@@ -24,4 +24,6 @@ const selectedGroupId = computed({
 const handleChange = (val: number | null) => {
   groupStore.setCurrentGroupId(val)
 }
+
+onMounted(() => groupStore.loadGroupsIfNeeded())
 </script>

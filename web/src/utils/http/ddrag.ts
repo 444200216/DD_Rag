@@ -3,12 +3,12 @@ import { useDdragAuthStore } from '@/store/modules/ddrag-auth'
 import { useUserStore } from '@/store/modules/user'
 import { ElMessage } from 'element-plus'
 
-const { VITE_API_URL } = import.meta.env
+const { VITE_API_BASE_URL } = import.meta.env
 const TIMEOUT = 30000
 
 const ddragAxios: AxiosInstance = axios.create({
   timeout: TIMEOUT,
-  baseURL: VITE_API_URL || '/api',
+  baseURL: VITE_API_BASE_URL || '/api',
   withCredentials: true,
   validateStatus: (status) => status >= 200 && status < 300,
 })

@@ -20,7 +20,7 @@ export function useSSEStream() {
     abortController = new AbortController()
 
     const authStore = useDdragAuthStore()
-    const baseUrl = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? '/api').replace(/\/$/, '')
     try {
       const response = await fetch(`${baseUrl}${options.url}`, {
         method: 'POST',
