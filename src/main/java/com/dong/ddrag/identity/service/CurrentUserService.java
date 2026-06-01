@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,16 +57,19 @@ public class CurrentUserService {
     private CurrentUser loadUserById(Long userId) {
         List<CurrentUser> users = jdbcTemplate.query(
                 """
-                select id, user_code, display_name, system_role, status, must_change_password
+                select id, user_code, username, display_name, email, system_role, status, must_change_password, last_login_at
                 from users
                 where id = ?
                 """,
                 (resultSet, rowNum) -> mapCurrentUser(resultSet.getLong("id"),
                         resultSet.getString("user_code"),
+                        resultSet.getString("username"),
                         resultSet.getString("display_name"),
+                        resultSet.getString("email"),
                         resultSet.getString("system_role"),
                         resultSet.getString("status"),
-                        resultSet.getBoolean("must_change_password")),
+                        resultSet.getBoolean("must_change_password"),
+                        resultSet.getObject("last_login_at", LocalDateTime.class)),
                 userId
         );
         if (users.isEmpty()) {
@@ -77,10 +81,13 @@ public class CurrentUserService {
     private CurrentUser mapCurrentUser(
             Long userId,
             String userCode,
+            String username,
             String displayName,
+            String email,
             String systemRole,
             String status,
-            boolean mustChangePassword
+            boolean mustChangePassword,
+            LocalDateTime lastLoginAt
     ) {
         if (UserStatus.DISABLED.name().equals(status)) {
             throw new BusinessException("账号已被禁用");
@@ -88,21 +95,29 @@ public class CurrentUserService {
         return new CurrentUser(
                 userId,
                 userCode,
+                username,
                 displayName,
+                email,
                 SystemRole.valueOf(systemRole),
-                mustChangePassword
+                UserStatus.valueOf(status),
+                mustChangePassword,
+                lastLoginAt
         );
     }
 
     public record CurrentUser(
             Long userId,
             String userCode,
+            String username,
             String displayName,
+            String email,
             SystemRole systemRole,
-            boolean mustChangePassword
+            UserStatus status,
+            boolean mustChangePassword,
+            LocalDateTime lastLoginAt
     ) {
-        public CurrentUser(Long userId, String userCode, String displayName) {
-            this(userId, userCode, displayName, SystemRole.USER, false);
+        public CurrentUser(Long userId, String userCode, String username, String displayName) {
+            this(userId, userCode, username, displayName, null, SystemRole.USER, UserStatus.ACTIVE, false, null);
         }
     }
 }

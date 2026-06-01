@@ -4,6 +4,7 @@ import com.dong.ddrag.common.enums.SystemRole;
 import com.dong.ddrag.common.enums.UserStatus;
 import com.dong.ddrag.common.exception.BusinessException;
 import com.dong.ddrag.user.model.vo.AdminUserItemResponse;
+import com.dong.ddrag.user.model.vo.UserLookupResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -82,5 +83,25 @@ public class UserQueryService {
     private long count(String sql, String value) {
         Long count = jdbcTemplate.queryForObject(sql, Long.class, value);
         return count == null ? 0 : count;
+    }
+
+    public UserLookupResponse lookupByUserCode(String userCode) {
+        List<UserLookupResponse> results = jdbcTemplate.query(
+                """
+                select id, user_code, display_name
+                from users
+                where user_code = ? and status = 'ACTIVE'
+                """,
+                (resultSet, rowNum) -> new UserLookupResponse(
+                        resultSet.getLong("id"),
+                        resultSet.getString("user_code"),
+                        resultSet.getString("display_name")
+                ),
+                userCode
+        );
+        if (results.isEmpty()) {
+            throw new BusinessException("用户不存在或已禁用: " + userCode);
+        }
+        return results.getFirst();
     }
 }

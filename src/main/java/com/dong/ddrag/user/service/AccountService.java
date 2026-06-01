@@ -5,6 +5,7 @@ import com.dong.ddrag.auth.service.PasswordHasher;
 import com.dong.ddrag.common.exception.BusinessException;
 import com.dong.ddrag.identity.service.CurrentUserService;
 import com.dong.ddrag.user.model.dto.ChangePasswordRequest;
+import com.dong.ddrag.user.model.dto.UpdateProfileRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,23 @@ public class AccountService {
             throw new BusinessException("用户不存在");
         }
         refreshTokenService.revokeActiveTokens(currentUser.userId());
+    }
+
+    @Transactional
+    public void updateProfile(CurrentUserService.CurrentUser currentUser, UpdateProfileRequest request) {
+        int updated = jdbcTemplate.update(
+                """
+                update users
+                set display_name = ?, email = ?, updated_at = now()
+                where id = ?
+                """,
+                request.displayName(),
+                request.email(),
+                currentUser.userId()
+        );
+        if (updated == 0) {
+            throw new BusinessException("用户不存在");
+        }
     }
 
     private void validatePasswordPolicy(String newPassword) {

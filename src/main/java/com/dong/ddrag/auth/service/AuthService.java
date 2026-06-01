@@ -146,9 +146,13 @@ public class AuthService {
         return new CurrentUserService.CurrentUser(
                 user.userId(),
                 user.userCode(),
+                user.username(),
                 user.displayName(),
+                user.email(),
                 user.systemRole(),
-                user.mustChangePassword()
+                user.status(),
+                user.mustChangePassword(),
+                user.lastLoginAt()
         );
     }
 
@@ -272,7 +276,7 @@ public class AuthService {
         List<UserAccount> users = jdbcTemplate.query(
                 """
                 select id, user_code, username, email, display_name, password_hash,
-                       system_role, status, must_change_password
+                       system_role, status, must_change_password, last_login_at
                 from users
                 where username = ? and email = ?
                 order by id
@@ -287,7 +291,8 @@ public class AuthService {
                         resultSet.getString("password_hash"),
                         SystemRole.valueOf(resultSet.getString("system_role")),
                         UserStatus.valueOf(resultSet.getString("status")),
-                        resultSet.getBoolean("must_change_password")
+                        resultSet.getBoolean("must_change_password"),
+                        resultSet.getObject("last_login_at", LocalDateTime.class)
                 ),
                 username,
                 email
@@ -302,7 +307,7 @@ public class AuthService {
         List<UserAccount> users = jdbcTemplate.query(
                 """
                 select id, user_code, username, email, display_name, password_hash,
-                       system_role, status, must_change_password
+                       system_role, status, must_change_password, last_login_at
                 from users
                 where username = ? or email = ?
                 order by id
@@ -317,7 +322,8 @@ public class AuthService {
                         resultSet.getString("password_hash"),
                         SystemRole.valueOf(resultSet.getString("system_role")),
                         UserStatus.valueOf(resultSet.getString("status")),
-                        resultSet.getBoolean("must_change_password")
+                        resultSet.getBoolean("must_change_password"),
+                        resultSet.getObject("last_login_at", LocalDateTime.class)
                 ),
                 loginId,
                 loginId
@@ -333,7 +339,7 @@ public class AuthService {
         List<UserAccount> users = jdbcTemplate.query(
                 """
                 select id, user_code, username, email, display_name, password_hash,
-                       system_role, status, must_change_password
+                       system_role, status, must_change_password, last_login_at
                 from users
                 where id = ?
                 """,
@@ -346,7 +352,8 @@ public class AuthService {
                         resultSet.getString("password_hash"),
                         SystemRole.valueOf(resultSet.getString("system_role")),
                         UserStatus.valueOf(resultSet.getString("status")),
-                        resultSet.getBoolean("must_change_password")
+                        resultSet.getBoolean("must_change_password"),
+                        resultSet.getObject("last_login_at", LocalDateTime.class)
                 ),
                 userId
         );
@@ -425,7 +432,8 @@ public class AuthService {
             String passwordHash,
             SystemRole systemRole,
             UserStatus status,
-            boolean mustChangePassword
+            boolean mustChangePassword,
+            LocalDateTime lastLoginAt
     ) {
     }
 }

@@ -1,119 +1,23 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import { pinia } from '../stores/pinia'
+import type { App } from 'vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { staticRoutes } from './routes/staticRoutes'
+import { configureNProgress } from '@/utils/router'
+import { setupBeforeEachGuard } from './guards/beforeEach'
+import { setupAfterEachGuard } from './guards/afterEach'
 
-const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    redirect: '/groups',
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('../pages/auth/LoginPage.vue'),
-    meta: { guestOnly: true },
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('../pages/auth/RegisterPage.vue'),
-    meta: { guestOnly: true },
-  },
-  {
-    path: '/account/security',
-    name: 'account-security',
-    component: () => import('../pages/account/AccountSecurityPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/groups',
-    name: 'groups',
-    component: () => import('../pages/group/GroupsPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/documents',
-    name: 'documents',
-    component: () => import('../pages/document/DocumentPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/qa',
-    name: 'qa',
-    component: () => import('../pages/qa/QaPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/assistant',
-    name: 'assistant',
-    component: () => import('../pages/assistant/AssistantPage.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/admin',
-    component: () => import('../pages/admin/AdminLayout.vue'),
-    meta: { requiresAuth: true, requiresAdmin: true },
-    children: [
-      {
-        path: '',
-        redirect: '/admin/overview',
-      },
-      {
-        path: 'overview',
-        name: 'admin-overview',
-        component: () => import('../pages/admin/AdminOverviewPage.vue'),
-      },
-      {
-        path: 'users',
-        name: 'admin-users',
-        component: () => import('../pages/admin/users/AdminUsersPage.vue'),
-      },
-      {
-        path: 'users/:userId',
-        name: 'admin-user-detail',
-        component: () => import('../pages/admin/users/AdminUserDetailPage.vue'),
-      },
-    ],
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/groups',
-  },
-]
-
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+// 创建路由实例
+export const router = createRouter({
+  history: createWebHashHistory(),
+  routes: staticRoutes // 静态路由
 })
 
-router.beforeEach(async (to) => {
-  const authStore = useAuthStore(pinia)
-  const guestOnly = to.matched.some((record) => record.meta.guestOnly)
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-
-  if (!guestOnly && !requiresAuth) {
-    return true
-  }
-
-  const currentUser = await authStore.bootstrap()
-
-  if (guestOnly) {
-    return currentUser === null ? true : authStore.resolveLandingPath(readRedirect(to.query.redirect))
-  }
-
-  if (currentUser === null) {
-    return { path: '/login', query: { redirect: to.fullPath } }
-  }
-
-  const roleRedirect = authStore.resolveRedirectForPath(to.path)
-  return roleRedirect === null || roleRedirect === to.path ? true : roleRedirect
-})
-
-function readRedirect(redirect: unknown) {
-  if (Array.isArray(redirect)) {
-    return typeof redirect[0] === 'string' ? redirect[0] : null
-  }
-  return typeof redirect === 'string' ? redirect : null
+// 初始化路由
+export function initRouter(app: App<Element>): void {
+  configureNProgress() // 顶部进度条
+  setupBeforeEachGuard(router) // 路由前置守卫
+  setupAfterEachGuard(router) // 路由后置守卫
+  app.use(router)
 }
 
-export default router
+// 主页路径，默认使用菜单第一个有效路径，配置后使用此路径
+export const HOME_PAGE_PATH = '/groups'
